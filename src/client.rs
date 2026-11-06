@@ -1862,7 +1862,7 @@ impl Client {
     ) -> ResultType<Stream> {
         crate::common::check_relay_uuid(&uuid)?;
         // The proxy's address family does not constrain the relay target.
-        let relay_server = check_port(relay_server, RELAY_PORT);
+        let relay_server = crate::tnk_lan::relay_local(check_port(relay_server, RELAY_PORT));
         let use_ws_proxy = Config::is_proxy() && is_ws_endpoint(&check_ws(&relay_server));
         let mut conn = connect_tcp(
             ipv4_to_ipv6(relay_server, ipv4 || use_ws_proxy),
