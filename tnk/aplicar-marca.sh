@@ -17,6 +17,9 @@ sed -i -E "s|^pub const RS_PUB_KEY: &str = \".*\";|pub const RS_PUB_KEY: \&str =
 
 # 2. Metadados do executavel (Propriedades > Detalhes no Windows)
 sed -i -E "s|^ProductName = \".*\"|ProductName = \"${APP_NAME}\"|; s|^FileDescription = \".*\"|FileDescription = \"${APP_NAME}\"|; s|^LegalCopyright = \".*\"|LegalCopyright = \"Baseado no RustDesk (AGPL-3.0). ${EMPRESA}\"|" Cargo.toml
+# Empacotador/instalador (libs/portable) tem metadados proprios
+sed -i -E "s|^ProductName = \".*\"|ProductName = \"${APP_NAME}\"|; s|^FileDescription = \".*\"|FileDescription = \"${APP_NAME}\"|; s|^LegalCopyright = \".*\"|LegalCopyright = \"Baseado no RustDesk (AGPL-3.0). ${EMPRESA}\"|; s|^OriginalFilename = \".*\"|OriginalFilename = \"TNK-Remoto.exe\"|" libs/portable/Cargo.toml
+grep -q "ProductName = \"${APP_NAME}\"" libs/portable/Cargo.toml || { echo "ERRO: empacotador nao aplicado"; exit 1; }
 RC=flutter/windows/runner/Runner.rc
 sed -i -E "s|(VALUE \"CompanyName\", )\".*\"|\1\"${EMPRESA}\"|; s|(VALUE \"FileDescription\", )\".*\"|\1\"${APP_NAME}\"|; s|(VALUE \"ProductName\", )\".*\"|\1\"${APP_NAME}\"|; s|(VALUE \"LegalCopyright\", )\".*\"|\1\"Baseado no RustDesk (AGPL-3.0). ${EMPRESA}\"|" "$RC"
 
